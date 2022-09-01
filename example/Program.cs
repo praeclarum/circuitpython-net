@@ -1,4 +1,2 @@
 ﻿
-unsafe {
-    CircuitPython.Globals.main(0, (byte**)0);
-}
+CircuitPython.Interpreter.Run("print('Hello, world! -from .NET')", CircuitPython.InputKind.Eval);
