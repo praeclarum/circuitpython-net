@@ -24,28 +24,28 @@ target triple = "x86_64-apple-macosx10.14.0"
 
 @mp_state_ctx = external local_unnamed_addr global %struct._mp_state_ctx_t, align 8
 
-; Function Attrs: nounwind ssp uwtable
+; Function Attrs: norecurse nounwind ssp uwtable
 define i32 @nlr_push_tail(%struct._nlr_buf_t*) local_unnamed_addr #0 !dbg !9 {
-  call void @llvm.dbg.value(metadata %struct._nlr_buf_t* %0, metadata !29, metadata !DIExpression()), !dbg !32
-  %2 = load i64, i64* bitcast (%struct._nlr_buf_t** getelementptr inbounds (%struct._mp_state_ctx_t, %struct._mp_state_ctx_t* @mp_state_ctx, i64 0, i32 0, i32 3) to i64*), align 8, !dbg !33, !tbaa !34
-  %3 = bitcast %struct._nlr_buf_t* %0 to i64*, !dbg !38
-  store i64 %2, i64* %3, align 8, !dbg !38, !tbaa !39
-  store %struct._nlr_buf_t* %0, %struct._nlr_buf_t** getelementptr inbounds (%struct._mp_state_ctx_t, %struct._mp_state_ctx_t* @mp_state_ctx, i64 0, i32 0, i32 3), align 8, !dbg !41, !tbaa !34
-  ret i32 0, !dbg !42
+  call void @llvm.dbg.value(metadata %struct._nlr_buf_t* %0, metadata !30, metadata !DIExpression()), !dbg !33
+  %2 = load i64, i64* bitcast (%struct._nlr_buf_t** getelementptr inbounds (%struct._mp_state_ctx_t, %struct._mp_state_ctx_t* @mp_state_ctx, i64 0, i32 0, i32 3) to i64*), align 8, !dbg !34, !tbaa !35
+  %3 = bitcast %struct._nlr_buf_t* %0 to i64*, !dbg !39
+  store i64 %2, i64* %3, align 8, !dbg !39, !tbaa !40
+  store %struct._nlr_buf_t* %0, %struct._nlr_buf_t** getelementptr inbounds (%struct._mp_state_ctx_t, %struct._mp_state_ctx_t* @mp_state_ctx, i64 0, i32 0, i32 3), align 8, !dbg !42, !tbaa !35
+  ret i32 0, !dbg !43
 }
 
-; Function Attrs: nounwind ssp uwtable
-define void @nlr_pop() local_unnamed_addr #0 !dbg !43 {
-  %1 = load i64*, i64** bitcast (%struct._nlr_buf_t** getelementptr inbounds (%struct._mp_state_ctx_t, %struct._mp_state_ctx_t* @mp_state_ctx, i64 0, i32 0, i32 3) to i64**), align 8, !dbg !48, !tbaa !34
-  %2 = load i64, i64* %1, align 8, !dbg !49, !tbaa !39
-  store i64 %2, i64* bitcast (%struct._nlr_buf_t** getelementptr inbounds (%struct._mp_state_ctx_t, %struct._mp_state_ctx_t* @mp_state_ctx, i64 0, i32 0, i32 3) to i64*), align 8, !dbg !50, !tbaa !34
-  ret void, !dbg !51
+; Function Attrs: norecurse nounwind ssp uwtable
+define void @nlr_pop() local_unnamed_addr #0 !dbg !44 {
+  %1 = load i64*, i64** bitcast (%struct._nlr_buf_t** getelementptr inbounds (%struct._mp_state_ctx_t, %struct._mp_state_ctx_t* @mp_state_ctx, i64 0, i32 0, i32 3) to i64**), align 8, !dbg !49, !tbaa !35
+  %2 = load i64, i64* %1, align 8, !dbg !50, !tbaa !40
+  store i64 %2, i64* bitcast (%struct._nlr_buf_t** getelementptr inbounds (%struct._mp_state_ctx_t, %struct._mp_state_ctx_t* @mp_state_ctx, i64 0, i32 0, i32 3) to i64*), align 8, !dbg !51, !tbaa !35
+  ret void, !dbg !52
 }
 
 ; Function Attrs: nounwind readnone speculatable
 declare void @llvm.dbg.value(metadata, metadata, metadata) #1
 
-attributes #0 = { nounwind ssp uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="penryn" "target-features"="+cx16,+fxsr,+mmx,+sahf,+sse,+sse2,+sse3,+sse4.1,+ssse3,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #0 = { norecurse nounwind ssp uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="penryn" "target-features"="+cx16,+fxsr,+mmx,+sahf,+sse,+sse2,+sse3,+sse4.1,+ssse3,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
 attributes #1 = { nounwind readnone speculatable }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
@@ -57,50 +57,51 @@ attributes #1 = { nounwind readnone speculatable }
 !2 = !{i32 2, !"Debug Info Version", i32 3}
 !3 = !{i32 1, !"wchar_size", i32 4}
 !4 = !{i32 7, !"PIC Level", i32 2}
-!5 = distinct !DICompileUnit(language: DW_LANG_C99, file: !6, producer: "Apple LLVM version 10.0.1 (clang-1001.0.46.4)", isOptimized: true, runtimeVersion: 0, emissionKind: FullDebug, enums: !7)
-!6 = !DIFile(filename: "/Users/fak/Dropbox/Projects/circuitpython/py/nlr.c", directory: "/Users/fak/Dropbox/Projects/circuitpython/ports/dotnet")
+!5 = distinct !DICompileUnit(language: DW_LANG_C99, file: !6, producer: "Apple clang version 11.0.0 (clang-1100.0.33.5)", isOptimized: true, runtimeVersion: 0, emissionKind: FullDebug, enums: !7, nameTableKind: GNU)
+!6 = !DIFile(filename: "/Users/fak/Dropbox/Projects/circuitpython/py/nlr.c", directory: "/private/var/folders/8t/rc0yh_3d5j32mgv0b31lrm080000gn/T")
 !7 = !{}
-!8 = !{!"Apple LLVM version 10.0.1 (clang-1001.0.46.4)"}
-!9 = distinct !DISubprogram(name: "nlr_push_tail", scope: !6, file: !6, line: 40, type: !10, isLocal: false, isDefinition: true, scopeLine: 40, flags: DIFlagPrototyped | DIFlagAllCallsDescribed, isOptimized: true, unit: !5, retainedNodes: !28)
-!10 = !DISubroutineType(types: !11)
-!11 = !{!12, !13}
-!12 = !DIBasicType(name: "unsigned int", size: 32, encoding: DW_ATE_unsigned)
-!13 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !14, size: 64)
-!14 = !DIDerivedType(tag: DW_TAG_typedef, name: "nlr_buf_t", file: !15, line: 72, baseType: !16)
-!15 = !DIFile(filename: "../../py/nlr.h", directory: "/Users/fak/Dropbox/Projects/circuitpython/ports/dotnet")
-!16 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "_nlr_buf_t", file: !15, line: 73, size: 1344, elements: !17)
-!17 = !{!18, !19, !21}
-!18 = !DIDerivedType(tag: DW_TAG_member, name: "prev", scope: !16, file: !15, line: 75, baseType: !13, size: 64)
-!19 = !DIDerivedType(tag: DW_TAG_member, name: "ret_val", scope: !16, file: !15, line: 76, baseType: !20, size: 64, offset: 64)
-!20 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: null, size: 64)
-!21 = !DIDerivedType(tag: DW_TAG_member, name: "jmpbuf", scope: !16, file: !15, line: 79, baseType: !22, size: 1184, offset: 128)
-!22 = !DIDerivedType(tag: DW_TAG_typedef, name: "jmp_buf", file: !23, line: 37, baseType: !24)
-!23 = !DIFile(filename: "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/usr/include/setjmp.h", directory: "/Users/fak/Dropbox/Projects/circuitpython/ports/dotnet")
-!24 = !DICompositeType(tag: DW_TAG_array_type, baseType: !25, size: 1184, elements: !26)
-!25 = !DIBasicType(name: "int", size: 32, encoding: DW_ATE_signed)
-!26 = !{!27}
-!27 = !DISubrange(count: 37)
-!28 = !{!29, !30}
-!29 = !DILocalVariable(name: "nlr", arg: 1, scope: !9, file: !6, line: 40, type: !13)
-!30 = !DILocalVariable(name: "top", scope: !9, file: !6, line: 41, type: !31)
-!31 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !13, size: 64)
-!32 = !DILocation(line: 40, column: 39, scope: !9)
-!33 = !DILocation(line: 42, column: 17, scope: !9)
-!34 = !{!35, !35, i64 0}
-!35 = !{!"any pointer", !36, i64 0}
-!36 = !{!"omnipotent char", !37, i64 0}
-!37 = !{!"Simple C/C++ TBAA"}
-!38 = !DILocation(line: 42, column: 15, scope: !9)
-!39 = !{!40, !35, i64 0}
-!40 = !{!"_nlr_buf_t", !35, i64 0, !35, i64 8, !36, i64 16}
-!41 = !DILocation(line: 44, column: 10, scope: !9)
-!42 = !DILocation(line: 45, column: 5, scope: !9)
-!43 = distinct !DISubprogram(name: "nlr_pop", scope: !6, file: !6, line: 48, type: !44, isLocal: false, isDefinition: true, scopeLine: 48, flags: DIFlagPrototyped | DIFlagAllCallsDescribed, isOptimized: true, unit: !5, retainedNodes: !46)
-!44 = !DISubroutineType(types: !45)
-!45 = !{null}
-!46 = !{!47}
-!47 = !DILocalVariable(name: "top", scope: !43, file: !6, line: 49, type: !31)
-!48 = !DILocation(line: 50, column: 13, scope: !43)
-!49 = !DILocation(line: 50, column: 20, scope: !43)
-!50 = !DILocation(line: 50, column: 10, scope: !43)
-!51 = !DILocation(line: 51, column: 1, scope: !43)
+!8 = !{!"Apple clang version 11.0.0 (clang-1100.0.33.5)"}
+!9 = distinct !DISubprogram(name: "nlr_push_tail", scope: !10, file: !10, line: 40, type: !11, scopeLine: 40, flags: DIFlagPrototyped | DIFlagAllCallsDescribed, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !5, retainedNodes: !29)
+!10 = !DIFile(filename: "/Users/fak/Dropbox/Projects/circuitpython/py/nlr.c", directory: "")
+!11 = !DISubroutineType(types: !12)
+!12 = !{!13, !14}
+!13 = !DIBasicType(name: "unsigned int", size: 32, encoding: DW_ATE_unsigned)
+!14 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !15, size: 64)
+!15 = !DIDerivedType(tag: DW_TAG_typedef, name: "nlr_buf_t", file: !16, line: 72, baseType: !17)
+!16 = !DIFile(filename: "/Users/fak/Dropbox/Projects/circuitpython/py/nlr.h", directory: "")
+!17 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "_nlr_buf_t", file: !16, line: 73, size: 1344, elements: !18)
+!18 = !{!19, !20, !22}
+!19 = !DIDerivedType(tag: DW_TAG_member, name: "prev", scope: !17, file: !16, line: 75, baseType: !14, size: 64)
+!20 = !DIDerivedType(tag: DW_TAG_member, name: "ret_val", scope: !17, file: !16, line: 76, baseType: !21, size: 64, offset: 64)
+!21 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: null, size: 64)
+!22 = !DIDerivedType(tag: DW_TAG_member, name: "jmpbuf", scope: !17, file: !16, line: 79, baseType: !23, size: 1184, offset: 128)
+!23 = !DIDerivedType(tag: DW_TAG_typedef, name: "jmp_buf", file: !24, line: 37, baseType: !25)
+!24 = !DIFile(filename: "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/setjmp.h", directory: "")
+!25 = !DICompositeType(tag: DW_TAG_array_type, baseType: !26, size: 1184, elements: !27)
+!26 = !DIBasicType(name: "int", size: 32, encoding: DW_ATE_signed)
+!27 = !{!28}
+!28 = !DISubrange(count: 37)
+!29 = !{!30, !31}
+!30 = !DILocalVariable(name: "nlr", arg: 1, scope: !9, file: !10, line: 40, type: !14)
+!31 = !DILocalVariable(name: "top", scope: !9, file: !10, line: 41, type: !32)
+!32 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !14, size: 64)
+!33 = !DILocation(line: 40, column: 39, scope: !9)
+!34 = !DILocation(line: 42, column: 17, scope: !9)
+!35 = !{!36, !36, i64 0}
+!36 = !{!"any pointer", !37, i64 0}
+!37 = !{!"omnipotent char", !38, i64 0}
+!38 = !{!"Simple C/C++ TBAA"}
+!39 = !DILocation(line: 42, column: 15, scope: !9)
+!40 = !{!41, !36, i64 0}
+!41 = !{!"_nlr_buf_t", !36, i64 0, !36, i64 8, !37, i64 16}
+!42 = !DILocation(line: 44, column: 10, scope: !9)
+!43 = !DILocation(line: 45, column: 5, scope: !9)
+!44 = distinct !DISubprogram(name: "nlr_pop", scope: !10, file: !10, line: 48, type: !45, scopeLine: 48, flags: DIFlagPrototyped | DIFlagAllCallsDescribed, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !5, retainedNodes: !47)
+!45 = !DISubroutineType(types: !46)
+!46 = !{null}
+!47 = !{!48}
+!48 = !DILocalVariable(name: "top", scope: !44, file: !10, line: 49, type: !32)
+!49 = !DILocation(line: 50, column: 13, scope: !44)
+!50 = !DILocation(line: 50, column: 20, scope: !44)
+!51 = !DILocation(line: 50, column: 10, scope: !44)
+!52 = !DILocation(line: 51, column: 1, scope: !44)

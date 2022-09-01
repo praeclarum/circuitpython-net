@@ -26,11 +26,11 @@ target triple = "x86_64-apple-macosx10.14.0"
 
 ; Function Attrs: norecurse nounwind ssp uwtable
 define void @mp_raise_reload_exception() local_unnamed_addr #0 !dbg !13 {
-  store volatile i8* bitcast (%struct._mp_obj_exception_t* getelementptr inbounds (%struct._mp_state_ctx_t, %struct._mp_state_ctx_t* @mp_state_ctx, i64 0, i32 1, i32 2) to i8*), i8** getelementptr inbounds (%struct._mp_state_ctx_t, %struct._mp_state_ctx_t* @mp_state_ctx, i64 0, i32 1, i32 4), align 8, !dbg !16, !tbaa !17
-  ret void, !dbg !34
+  store volatile i8* bitcast (%struct._mp_obj_exception_t* getelementptr inbounds (%struct._mp_state_ctx_t, %struct._mp_state_ctx_t* @mp_state_ctx, i64 0, i32 1, i32 2) to i8*), i8** getelementptr inbounds (%struct._mp_state_ctx_t, %struct._mp_state_ctx_t* @mp_state_ctx, i64 0, i32 1, i32 4), align 8, !dbg !17, !tbaa !18
+  ret void, !dbg !35
 }
 
-attributes #0 = { norecurse nounwind ssp uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="penryn" "target-features"="+cx16,+fxsr,+mmx,+sahf,+sse,+sse2,+sse3,+sse4.1,+ssse3,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #0 = { norecurse nounwind ssp uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="penryn" "target-features"="+cx16,+fxsr,+mmx,+sahf,+sse,+sse2,+sse3,+sse4.1,+ssse3,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.dbg.cu = !{!5}
@@ -41,33 +41,34 @@ attributes #0 = { norecurse nounwind ssp uwtable "correctly-rounded-divide-sqrt-
 !2 = !{i32 2, !"Debug Info Version", i32 3}
 !3 = !{i32 1, !"wchar_size", i32 4}
 !4 = !{i32 7, !"PIC Level", i32 2}
-!5 = distinct !DICompileUnit(language: DW_LANG_C99, file: !6, producer: "Apple LLVM version 10.0.1 (clang-1001.0.46.4)", isOptimized: true, runtimeVersion: 0, emissionKind: FullDebug, enums: !7, retainedTypes: !8)
-!6 = !DIFile(filename: "/Users/fak/Dropbox/Projects/circuitpython/py/reload.c", directory: "/Users/fak/Dropbox/Projects/circuitpython/ports/dotnet")
+!5 = distinct !DICompileUnit(language: DW_LANG_C99, file: !6, producer: "Apple clang version 11.0.0 (clang-1100.0.33.5)", isOptimized: true, runtimeVersion: 0, emissionKind: FullDebug, enums: !7, retainedTypes: !8, nameTableKind: GNU)
+!6 = !DIFile(filename: "/Users/fak/Dropbox/Projects/circuitpython/py/reload.c", directory: "/private/var/folders/8t/rc0yh_3d5j32mgv0b31lrm080000gn/T")
 !7 = !{}
 !8 = !{!9}
 !9 = !DIDerivedType(tag: DW_TAG_typedef, name: "mp_obj_t", file: !10, line: 46, baseType: !11)
-!10 = !DIFile(filename: "../../py/obj.h", directory: "/Users/fak/Dropbox/Projects/circuitpython/ports/dotnet")
+!10 = !DIFile(filename: "/Users/fak/Dropbox/Projects/circuitpython/py/obj.h", directory: "")
 !11 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: null, size: 64)
-!12 = !{!"Apple LLVM version 10.0.1 (clang-1001.0.46.4)"}
-!13 = distinct !DISubprogram(name: "mp_raise_reload_exception", scope: !6, file: !6, line: 8, type: !14, isLocal: false, isDefinition: true, scopeLine: 8, flags: DIFlagPrototyped | DIFlagAllCallsDescribed, isOptimized: true, unit: !5, retainedNodes: !7)
-!14 = !DISubroutineType(types: !15)
-!15 = !{null}
-!16 = !DILocation(line: 9, column: 39, scope: !13)
-!17 = !{!18, !20, i64 136}
-!18 = !{!"_mp_state_ctx_t", !19, i64 0, !23, i64 32, !30, i64 336}
-!19 = !{!"_mp_state_thread_t", !20, i64 0, !20, i64 8, !20, i64 16, !20, i64 24}
-!20 = !{!"any pointer", !21, i64 0}
-!21 = !{!"omnipotent char", !22, i64 0}
-!22 = !{!"Simple C/C++ TBAA"}
-!23 = !{!"_mp_state_vm_t", !20, i64 0, !24, i64 8, !24, i64 40, !27, i64 72, !20, i64 104, !27, i64 112, !29, i64 144, !29, i64 176, !21, i64 208, !20, i64 272, !26, i64 280, !26, i64 288, !26, i64 296}
-!24 = !{!"_mp_obj_exception_t", !25, i64 0, !26, i64 8, !26, i64 12, !20, i64 16, !20, i64 24}
-!25 = !{!"_mp_obj_base_t", !20, i64 0}
-!26 = !{!"long", !21, i64 0}
-!27 = !{!"_mp_obj_dict_t", !25, i64 0, !28, i64 8}
-!28 = !{!"_mp_map_t", !26, i64 0, !26, i64 0, !26, i64 0, !26, i64 0, !26, i64 0, !26, i64 8, !20, i64 16}
-!29 = !{!"_mp_obj_list_t", !25, i64 0, !26, i64 8, !26, i64 16, !20, i64 24}
-!30 = !{!"_mp_state_mem_t", !20, i64 0, !26, i64 8, !20, i64 16, !20, i64 24, !20, i64 32, !31, i64 40, !21, i64 48, !32, i64 560, !33, i64 562, !26, i64 568, !26, i64 576, !20, i64 584}
-!31 = !{!"int", !21, i64 0}
-!32 = !{!"short", !21, i64 0}
-!33 = !{!"_Bool", !21, i64 0}
-!34 = !DILocation(line: 16, column: 1, scope: !13)
+!12 = !{!"Apple clang version 11.0.0 (clang-1100.0.33.5)"}
+!13 = distinct !DISubprogram(name: "mp_raise_reload_exception", scope: !14, file: !14, line: 8, type: !15, scopeLine: 8, flags: DIFlagPrototyped | DIFlagAllCallsDescribed, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !5, retainedNodes: !7)
+!14 = !DIFile(filename: "/Users/fak/Dropbox/Projects/circuitpython/py/reload.c", directory: "")
+!15 = !DISubroutineType(types: !16)
+!16 = !{null}
+!17 = !DILocation(line: 9, column: 39, scope: !13)
+!18 = !{!19, !21, i64 136}
+!19 = !{!"_mp_state_ctx_t", !20, i64 0, !24, i64 32, !31, i64 336}
+!20 = !{!"_mp_state_thread_t", !21, i64 0, !21, i64 8, !21, i64 16, !21, i64 24}
+!21 = !{!"any pointer", !22, i64 0}
+!22 = !{!"omnipotent char", !23, i64 0}
+!23 = !{!"Simple C/C++ TBAA"}
+!24 = !{!"_mp_state_vm_t", !21, i64 0, !25, i64 8, !25, i64 40, !28, i64 72, !21, i64 104, !28, i64 112, !30, i64 144, !30, i64 176, !22, i64 208, !21, i64 272, !27, i64 280, !27, i64 288, !27, i64 296}
+!25 = !{!"_mp_obj_exception_t", !26, i64 0, !27, i64 8, !27, i64 12, !21, i64 16, !21, i64 24}
+!26 = !{!"_mp_obj_base_t", !21, i64 0}
+!27 = !{!"long", !22, i64 0}
+!28 = !{!"_mp_obj_dict_t", !26, i64 0, !29, i64 8}
+!29 = !{!"_mp_map_t", !27, i64 0, !27, i64 0, !27, i64 0, !27, i64 0, !27, i64 0, !27, i64 8, !21, i64 16}
+!30 = !{!"_mp_obj_list_t", !26, i64 0, !27, i64 8, !27, i64 16, !21, i64 24}
+!31 = !{!"_mp_state_mem_t", !21, i64 0, !27, i64 8, !21, i64 16, !21, i64 24, !21, i64 32, !32, i64 40, !22, i64 48, !33, i64 560, !34, i64 562, !27, i64 568, !27, i64 576, !21, i64 584}
+!32 = !{!"int", !22, i64 0}
+!33 = !{!"short", !22, i64 0}
+!34 = !{!"_Bool", !22, i64 0}
+!35 = !DILocation(line: 16, column: 1, scope: !13)

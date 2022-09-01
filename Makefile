@@ -3,8 +3,6 @@ NATIVEDLL=bin/CircuitPythonNative.dll
 
 all: $(NATIVEDLL)
 
-circuitpython/Makefile:
-
 circuitpython/ports/dotnet/frozentest.mpy: circuitpython/Makefile
 	pip3 install huffman
 	cd circuitpython && make PYTHON=python3 CFLAGS_EXTRA=-Wno-array-bounds -C mpy-cross
