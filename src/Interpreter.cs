@@ -34,4 +34,9 @@ public static class Interpreter
             handle.Free();
         }
     }
+
+    public static void RunRepl()
+    {
+        Globals.pyexec_friendly_repl();
+    }
 }
