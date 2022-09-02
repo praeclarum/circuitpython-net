@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 using CircuitPythonNative;
 
@@ -31,6 +32,10 @@ public static class Engine
             var pointer = (byte*)handle.AddrOfPinnedObject();
             StdLib.Memory.RegisterMemory(pointer, inputBytes.Length, "code");
             var result = PyObject.FromPointer((IntPtr)Globals.do_str(pointer, (int)inputKind));
+            var roots = PyObject.GetRoots();
+            fixed (IntPtr* rootsPointer = roots) {
+                CircuitPythonNative.Globals.dotnet_set_roots((byte**)rootsPointer, roots.Length);
+            }
             StdLib.Memory.UnregisterMemory(pointer);
             return result;
         }

@@ -34,6 +34,18 @@ public abstract class PyObject
         Handle = handle;
     }
 
+    public static IntPtr[] GetRoots()
+    {
+        var wobjs = cache.Values.ToArray();
+        var results = new List<IntPtr>();
+        foreach (var w in wobjs) {
+            if (w.TryGetTarget(out var o) && o is PyGCObject obj) {
+                results.Add(obj.Handle);
+            }
+        }
+        return results.ToArray();
+    }
+
     public override string ToString()
     {
         return $"<{PyTypeName}:{Handle}>";
@@ -86,7 +98,7 @@ public class PyDict : PyGCObject
     public PyDict(IntPtr handle) : base(handle) { }
 }
 
-public class PyInt : PyObject
+public class PyInt : PyGCObject
 {
     public override unsafe long Int64Value => Globals.mp_obj_get_int((byte*)Handle);
     public PyInt(IntPtr handle) : base(handle) { }
