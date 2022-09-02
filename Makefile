@@ -13,7 +13,7 @@ $(NATIVEDLL): circuitpython/ports/dotnet/main.c circuitpython/ports/dotnet/froze
 	cd circuitpython/ports/dotnet && make V=2 PYTHON=python3
 	cp -a circuitpython/ports/dotnet/build/CircuitPythonNative.* bin/
 
-run: $(NATIVEDLL) example/Program.cs example/CircuitPythonExample.csproj
+run: $(NATIVEDLL) example/Program.cs example/CircuitPythonExample.csproj src/Engine.cs src/PyObject.cs
 	dotnet run --project example/CircuitPythonExample.csproj
 
 build:

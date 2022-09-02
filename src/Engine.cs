@@ -14,7 +14,7 @@ public static class Engine
 {
     unsafe static Engine()
     {
-        Globals.gc_init(&CircuitPythonNative.Modules.main.Globals->heap, &CircuitPythonNative.Modules.main.Globals->heap + 2*1024u);
+        Globals.gc_init(&CircuitPythonNative.Modules.main.Globals->heap, &CircuitPythonNative.Modules.main.Globals->heap + 64*1024u);
         Globals.qstr_init();
         Globals.mp_init();
     }
