@@ -10,16 +10,16 @@ public enum InputKind {
     Eval = 2,
 }
 
-public static class Interpreter
+public static class Engine
 {
-    unsafe static Interpreter()
+    unsafe static Engine()
     {
         Globals.gc_init(&CircuitPythonNative.Modules.main.Globals->heap, &CircuitPythonNative.Modules.main.Globals->heap + 2*1024u);
         Globals.qstr_init();
         Globals.mp_init();
     }
 
-    public static unsafe void Run(string input, InputKind inputKind)
+    public static unsafe void Execute(string input, InputKind inputKind)
     {
         var inputBytes = System.Text.Encoding.UTF8.GetBytes(input + "\0");
         var handle = GCHandle.Alloc(inputBytes, GCHandleType.Pinned);
@@ -38,7 +38,7 @@ public static class Interpreter
         }
     }
 
-    public static void RunRepl()
+    public static void ExecuteRepl()
     {
         Globals.pyexec_friendly_repl();
     }

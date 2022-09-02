@@ -1,3 +1,3 @@
 ﻿
-CircuitPython.Interpreter.Run("print('Hello, world! -from .NET')", CircuitPython.InputKind.Eval);
-CircuitPython.Interpreter.RunRepl();
+CircuitPython.Engine.Execute("print('Hello, world! -from .NET')", CircuitPython.InputKind.Eval);
+CircuitPython.Engine.ExecuteRepl();
