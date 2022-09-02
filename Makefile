@@ -5,7 +5,7 @@ all: $(NATIVEDLL)
 
 circuitpython/ports/dotnet/frozentest.mpy: circuitpython/Makefile
 	pip3 install huffman
-	cd circuitpython && make PYTHON=python3 CFLAGS_EXTRA=-Wno-array-bounds -C mpy-cross
+	cd circuitpython && make PYTHON=python3 "CFLAGS_EXTRA=-Wno-array-bounds -Wno-strict-aliasing" -C mpy-cross
 	circuitpython/mpy-cross/mpy-cross circuitpython/ports/dotnet/frozentest.py
 
 $(NATIVEDLL): circuitpython/ports/dotnet/frozentest.mpy
