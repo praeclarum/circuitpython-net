@@ -21,6 +21,8 @@ jobs:
         dotnet-version: 6.0.400
     - name: Restore dependencies
       run: dotnet restore
+    - name: Install build tools
+      run: apt-get install gettext
     - name: Build CircuitPythonNative.dll
       run: make bin/CircuitPythonNative.dll
     - name: Build
