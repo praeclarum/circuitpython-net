@@ -31,12 +31,18 @@ public static class Engine
         try {
             var pointer = (byte*)handle.AddrOfPinnedObject();
             StdLib.Memory.RegisterMemory(pointer, inputBytes.Length, "code");
-            var result = PyObject.FromPointer((IntPtr)Globals.do_str(pointer, (int)inputKind));
+            var resultHandle = (IntPtr)Globals.do_str(pointer, (int)inputKind);
+            StdLib.Memory.UnregisterMemory(pointer);
+            if (resultHandle == IntPtr.Zero)
+                throw new OutOfMemoryException();
+            var result = PyObject.FromPointer(resultHandle);
+            if (result is PyException ex) {
+                throw new ExecutionException(ex);
+            }
             var roots = PyObject.GetRoots();
             fixed (IntPtr* rootsPointer = roots) {
                 CircuitPythonNative.Globals.dotnet_set_roots((byte**)rootsPointer, roots.Length);
             }
-            StdLib.Memory.UnregisterMemory(pointer);
             return result;
         }
         finally {
@@ -47,5 +53,13 @@ public static class Engine
     public static void ExecuteRepl()
     {
         Globals.pyexec_friendly_repl();
+    }
+}
+
+public class ExecutionException : Exception
+{
+    public PyException Exception { get; }
+    public ExecutionException(PyException exception) : base(exception.PyTypeName) { 
+        Exception = exception;
     }
 }

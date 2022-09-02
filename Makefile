@@ -8,7 +8,7 @@ circuitpython/ports/dotnet/frozentest.mpy: circuitpython/Makefile
 	cd circuitpython && make PYTHON=python3 "CFLAGS_EXTRA=-Wno-array-bounds -Wno-strict-aliasing" -C mpy-cross
 	circuitpython/mpy-cross/mpy-cross circuitpython/ports/dotnet/frozentest.py
 
-$(NATIVEDLL): circuitpython/ports/dotnet/main.c circuitpython/ports/dotnet/frozentest.mpy
+$(NATIVEDLL): circuitpython/ports/dotnet/main.c circuitpython/ports/dotnet/frozentest.mpy circuitpython/ports/dotnet/mpconfigport.h
 	mkdir -p bin
 	cd circuitpython/ports/dotnet && make V=2 PYTHON=python3
 	cp -a circuitpython/ports/dotnet/build/CircuitPythonNative.* bin/

@@ -67,4 +67,22 @@ public class EngineTests
         Assert.AreEqual(nameof(PyTuple), result.GetType().Name);
         Assert.AreEqual(3L, result.Length!.Int64Value);
     }
+
+    [Test]
+    public void AbsSmallInt()
+    {
+        var result = Engine.Execute("abs(-10000000100000)", InputKind.Eval)!;
+        Assert.AreEqual("int", result.PyTypeName);
+        Assert.AreEqual(nameof(PySmallInt), result.GetType().Name);
+        Assert.AreEqual(10000000100000L, result.Int64Value);
+    }
+
+    [Test]
+    public void SysModule()
+    {
+        var result = Engine.Execute("import sys; sys.exit", InputKind.Eval)!;
+        Assert.AreEqual("int", result.PyTypeName);
+        Assert.AreEqual(nameof(PySmallInt), result.GetType().Name);
+        Assert.AreEqual(10000000100000L, result.Int64Value);
+    }
 }

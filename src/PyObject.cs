@@ -24,7 +24,7 @@ public abstract class PyObject
     public virtual long Int64Value => 0;
     public unsafe bool IsCallable => Globals.mp_obj_is_callable((byte*)Handle) != 0;
     public unsafe bool IsTrue => Globals.mp_obj_is_true((byte*)Handle) != 0;
-    public unsafe PyObject? Length => FromPointer(Globals.mp_obj_len((byte*)Handle));
+    public virtual unsafe PyObject? Length => null;
     public unsafe virtual string? StringValue => null;
 
     public PyObject(IntPtr handle)
@@ -57,6 +57,8 @@ public abstract class PyObject
     {
         if (handle == IntPtr.Zero)
             return null;
+        if (Globals.dotnet_obj_is_none((byte*)handle) != 0)
+            return null;
 
         if (cache.TryGetValue(handle, out var weakRef) && weakRef.TryGetTarget(out var pyObj))
             return pyObj;
@@ -79,6 +81,9 @@ public abstract class PyObject
         else if (Globals.dotnet_obj_is_tuple((byte*)handle) != 0) {
             pyObj = new PyTuple(handle);
         }
+        else if (Globals.dotnet_obj_is_exception((byte*)handle) != 0) {
+            pyObj = new PyException(handle);
+        }
         else {
             pyObj = new PyGCObject(handle);
         }
@@ -95,7 +100,13 @@ public class PyGCObject : PyObject
 
 public class PyDict : PyGCObject
 {
+    public override unsafe PyObject? Length => FromPointer(Globals.mp_obj_len((byte*)Handle));
     public PyDict(IntPtr handle) : base(handle) { }
+}
+
+public class PyException : PyGCObject
+{
+    public PyException(IntPtr handle) : base(handle) { }
 }
 
 public class PyInt : PyGCObject
@@ -106,6 +117,7 @@ public class PyInt : PyGCObject
 
 public class PyList : PyGCObject
 {
+    public override unsafe PyObject? Length => FromPointer(Globals.mp_obj_len((byte*)Handle));
     public PyList(IntPtr handle) : base(handle) { }
 }
 
@@ -117,14 +129,14 @@ public class PySmallInt : PyObject
 
 public class PyString : PyGCObject
 {
-    public PyString(IntPtr handle) : base(handle) { }
-
+    public override unsafe PyObject? Length => FromPointer(Globals.mp_obj_len((byte*)Handle));
     public override unsafe string? StringValue {
         get {
             var pointer = Globals.mp_obj_str_get_str((byte*)Handle);
             return Marshal.PtrToStringUTF8((IntPtr)pointer);
         }
     }
+    public PyString(IntPtr handle) : base(handle) { }
 }
 
 public class PyTuple : PyGCObject
