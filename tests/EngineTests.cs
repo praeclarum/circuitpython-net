@@ -85,6 +85,15 @@ public class EngineTests
     }
 
     [Test]
+    public void JsonModule()
+    {
+        Engine.Execute("import ujson", InputKind.Single);
+        var result = Engine.Execute("ujson.dumps({'A': 1*10, 'B': [2*10]})", InputKind.Eval)!;
+        Assert.AreEqual("str", result.PyTypeName);
+        Assert.AreEqual("{\"A\": 10, \"B\": [20]}", result.StringValue);
+    }
+
+    [Test]
     public void SyntaxErrorThrows()
     {
         Assert.Throws<ExecutionException>(() => Engine.Execute("impo rt sys", InputKind.Eval));
