@@ -58,4 +58,13 @@ public class EngineTests
         Assert.AreEqual(nameof(PyDict), result.GetType().Name);
         Assert.AreEqual(3L, result.Length!.Int64Value);
     }
+
+    [Test]
+    public void ATuple()
+    {
+        var result = Engine.Execute("(('A', 10), ('B', 20), ('C', 30))", InputKind.Eval)!;
+        Assert.AreEqual("tuple", result.PyTypeName);
+        Assert.AreEqual(nameof(PyTuple), result.GetType().Name);
+        Assert.AreEqual(3L, result.Length!.Int64Value);
+    }
 }

@@ -5,7 +5,7 @@ using CircuitPythonNative;
 
 namespace CircuitPython;
 
-public class PyObject
+public abstract class PyObject
 {
     static readonly ConcurrentDictionary<IntPtr, WeakReference<PyObject>> cache = new ConcurrentDictionary<IntPtr, WeakReference<PyObject>>();
 
@@ -64,6 +64,9 @@ public class PyObject
         else if (Globals.dotnet_obj_is_dict((byte*)handle) != 0) {
             pyObj = new PyDict(handle);
         }
+        else if (Globals.dotnet_obj_is_tuple((byte*)handle) != 0) {
+            pyObj = new PyTuple(handle);
+        }
         else {
             pyObj = new PyGCObject(handle);
         }
@@ -73,10 +76,14 @@ public class PyObject
     }
 }
 
-public class PySmallInt : PyObject
+public class PyGCObject : PyObject
 {
-    public override unsafe long Int64Value => Globals.mp_obj_get_int((byte*)Handle);
-    public PySmallInt(IntPtr handle) : base(handle) { }
+    public PyGCObject(IntPtr handle) : base(handle) { }
+}
+
+public class PyDict : PyGCObject
+{
+    public PyDict(IntPtr handle) : base(handle) { }
 }
 
 public class PyInt : PyObject
@@ -85,9 +92,15 @@ public class PyInt : PyObject
     public PyInt(IntPtr handle) : base(handle) { }
 }
 
-public class PyGCObject : PyObject
+public class PyList : PyGCObject
 {
-    public PyGCObject(IntPtr handle) : base(handle) { }
+    public PyList(IntPtr handle) : base(handle) { }
+}
+
+public class PySmallInt : PyObject
+{
+    public override unsafe long Int64Value => Globals.mp_obj_get_int((byte*)Handle);
+    public PySmallInt(IntPtr handle) : base(handle) { }
 }
 
 public class PyString : PyGCObject
@@ -102,12 +115,7 @@ public class PyString : PyGCObject
     }
 }
 
-public class PyList : PyGCObject
+public class PyTuple : PyGCObject
 {
-    public PyList(IntPtr handle) : base(handle) { }
-}
-
-public class PyDict : PyGCObject
-{
-    public PyDict(IntPtr handle) : base(handle) { }
+    public PyTuple(IntPtr handle) : base(handle) { }
 }
