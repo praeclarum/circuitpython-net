@@ -89,4 +89,15 @@ public class EngineTests
     {
         Assert.Throws<ExecutionException>(() => Engine.Execute("impo rt sys", InputKind.Eval));
     }
+
+    [Test]
+    public void EvalVariable()
+    {
+        Engine.Execute("x = 234 + 10000", InputKind.Single);
+        var result = Engine.Execute("x", InputKind.Eval)!;
+        Assert.AreEqual("int", result.PyTypeName);
+        Assert.AreEqual(nameof(PySmallInt), result.GetType().Name);
+        Assert.AreEqual(10234, result.Int64Value);
+    }
+
 }
