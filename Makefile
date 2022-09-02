@@ -16,5 +16,13 @@ $(NATIVEDLL): circuitpython/ports/dotnet/frozentest.mpy
 run: $(NATIVEDLL) example/Program.cs example/CircuitPythonExample.csproj
 	dotnet run --project example/CircuitPythonExample.csproj
 
+build:
+	dotnet build --no-restore
+
+test:
+	dotnet test --no-build --verbosity normal
+
 pack: $(NATIVEDLL)
-	dotnet pack src/CircuitPython.csproj
+	dotnet pack --no-build -v n src/CircuitPython.csproj
+	mkdir -p PackageOut
+	cp -a src/bin/Debug/circuitpython-net.* PackageOut
