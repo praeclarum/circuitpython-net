@@ -19,7 +19,7 @@ public static class Engine
         Globals.mp_init();
     }
 
-    public static unsafe void Execute(string input, InputKind inputKind)
+    public static unsafe PyObject? Execute(string input, InputKind inputKind)
     {
         var inputBytes = System.Text.Encoding.UTF8.GetBytes(input + "\0");
         var handle = GCHandle.Alloc(inputBytes, GCHandleType.Pinned);
@@ -30,8 +30,9 @@ public static class Engine
         try {
             var pointer = (byte*)handle.AddrOfPinnedObject();
             StdLib.Memory.RegisterMemory(pointer, inputBytes.Length, "code");
-            Globals.do_str(pointer, (int)inputKind);
+            var result = PyObject.FromPointer((IntPtr)Globals.do_str(pointer, (int)inputKind));
             StdLib.Memory.UnregisterMemory(pointer);
+            return result;
         }
         finally {
             handle.Free();
