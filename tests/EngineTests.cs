@@ -9,7 +9,7 @@ public class EngineTests
     public void PrintHelloWorld()
     {
         var result = Engine.Execute("print('Hello, world! -from .NET')", InputKind.Eval);
-        Assert.AreEqual("NoneType", result?.PyTypeName);
+        Assert.IsNull(result);
     }
 
     [Test]
@@ -80,9 +80,13 @@ public class EngineTests
     [Test]
     public void SysModule()
     {
-        var result = Engine.Execute("import sys; sys.exit", InputKind.Eval)!;
-        Assert.AreEqual("int", result.PyTypeName);
-        Assert.AreEqual(nameof(PySmallInt), result.GetType().Name);
-        Assert.AreEqual(10000000100000L, result.Int64Value);
+        var result = Engine.Execute("import sys; sys.exit", InputKind.File)!;
+        Assert.IsNull(result);
+    }
+
+    [Test]
+    public void SyntaxErrorThrows()
+    {
+        Assert.Throws<ExecutionException>(() => Engine.Execute("impo rt sys", InputKind.Eval));
     }
 }

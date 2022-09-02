@@ -36,12 +36,12 @@ public static class Engine
             if (resultHandle == IntPtr.Zero)
                 throw new OutOfMemoryException();
             var result = PyObject.FromPointer(resultHandle);
-            if (result is PyException ex) {
-                throw new ExecutionException(ex);
-            }
             var roots = PyObject.GetRoots();
             fixed (IntPtr* rootsPointer = roots) {
                 CircuitPythonNative.Globals.dotnet_set_roots((byte**)rootsPointer, roots.Length);
+            }
+            if (result is PyException ex) {
+                throw new ExecutionException(ex);
             }
             return result;
         }

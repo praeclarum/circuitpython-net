@@ -141,5 +141,6 @@ public class PyString : PyGCObject
 
 public class PyTuple : PyGCObject
 {
+    public override unsafe PyObject? Length => FromPointer(Globals.mp_obj_len((byte*)Handle));
     public PyTuple(IntPtr handle) : base(handle) { }
 }
