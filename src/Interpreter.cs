@@ -28,7 +28,10 @@ public static class Interpreter
         CircuitPythonNative.Modules.main.Globals->stack_top = local4;
 
         try {
-            Globals.do_str((byte*)handle.AddrOfPinnedObject(), (int)inputKind);
+            var pointer = (byte*)handle.AddrOfPinnedObject();
+            StdLib.Memory.RegisterMemory(pointer, inputBytes.Length, "code");
+            Globals.do_str(pointer, (int)inputKind);
+            StdLib.Memory.UnregisterMemory(pointer);
         }
         finally {
             handle.Free();

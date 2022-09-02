@@ -8,12 +8,10 @@ circuitpython/ports/dotnet/frozentest.mpy: circuitpython/Makefile
 	cd circuitpython && make PYTHON=python3 CFLAGS_EXTRA=-Wno-array-bounds -C mpy-cross
 	circuitpython/mpy-cross/mpy-cross circuitpython/ports/dotnet/frozentest.py
 
-# bin/CircuitPython.dll: circuitpython/ports/dotnet/frozentest.mpy
-#	cd circuitpython/ports/dotnet && make V=2 PYTHON=python3
-
-$(NATIVEDLL): ir/*.ll
+$(NATIVEDLL): circuitpython/ports/dotnet/frozentest.mpy
 	mkdir -p bin
-	iril -o $@ $^
+	cd circuitpython/ports/dotnet && make V=2 PYTHON=python3
+	cp -a circuitpython/ports/dotnet/build/CircuitPythonNative.* bin/
 
 run: $(NATIVEDLL) example/Program.cs example/CircuitPythonExample.csproj
 	dotnet run --project example/CircuitPythonExample.csproj
