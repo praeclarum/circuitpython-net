@@ -10,7 +10,7 @@ circuitpython/ports/dotnet/frozentest.mpy: circuitpython/Makefile
 
 $(NATIVEDLL): circuitpython/ports/dotnet/frozentest.mpy
 	mkdir -p bin
-	cd circuitpython/ports/dotnet && make V=2 PYTHON=python3
+	cd circuitpython/ports/dotnet && make V=2 PYTHON=python3 build/CircuitPythonNative.dll
 	cp -a circuitpython/ports/dotnet/build/CircuitPythonNative.* bin/
 
 run: $(NATIVEDLL) example/Program.cs example/CircuitPythonExample.csproj
