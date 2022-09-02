@@ -19,6 +19,8 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.400
+    - name: Install Iril
+      run: dotnet tool install --global iril-cli
     - name: Restore dependencies
       run: dotnet restore
     - name: Install build tools
