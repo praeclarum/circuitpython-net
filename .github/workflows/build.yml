@@ -15,6 +15,13 @@ jobs:
     - uses: actions/checkout@v3
       with:
         submodules: true
+    - name: Update Versions
+      env:
+        VERSION_PREFIX: '0.1'
+        VERSION_SUFFIX: ${{github.run_number}}
+      run: |
+        VERSION=$VERSION_PREFIX.$VERSION_SUFFIX
+        sed -i "s:<Version>1.0.0</Version>:<Version>$VERSION</Version>:g" src/CircuitPython.csproj
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
