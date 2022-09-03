@@ -13,15 +13,15 @@ public enum InputKind {
 
 public class Engine
 {
-    readonly Globals Globals = new Globals();
-    public Globals Native => Globals;
+    readonly Instance instance = new Instance();
+    public Instance Native => instance;
 
     public unsafe Engine()
     {
-        Console.WriteLine($"Initializing CircuitPython engine: {(IntPtr)Globals.Data}");
-        Globals.gc_init(&Globals.Data->main.heap, &Globals.Data->main.heap + 64*1024u);
-        Globals.qstr_init();
-        Globals.mp_init();
+        Console.WriteLine($"Initializing CircuitPython engine: {(IntPtr)instance.Data}");
+        Globals.gc_init(instance.Data, &instance.Data->main.heap, &instance.Data->main.heap + 64*1024u);
+        Globals.qstr_init(instance.Data);
+        Globals.mp_init(instance.Data);
     }
 
     public unsafe PyObject? Execute(string input, InputKind inputKind)
@@ -30,12 +30,12 @@ public class Engine
         var handle = GCHandle.Alloc(inputBytes, GCHandleType.Pinned);
 
         var local4 = stackalloc byte[4];
-        Globals.Data->main.stack_top = local4;
+        instance.Data->main.stack_top = local4;
 
         try {
             var pointer = (byte*)handle.AddrOfPinnedObject();
             StdLib.Memory.RegisterMemory(pointer, inputBytes.Length, "code");
-            var resultHandle = (IntPtr)Globals.do_str(pointer, (int)inputKind);
+            var resultHandle = (IntPtr)Globals.do_str(instance.Data, pointer, (int)inputKind);
             StdLib.Memory.UnregisterMemory(pointer);
             if (resultHandle == IntPtr.Zero)
                 throw new OutOfMemoryException();
@@ -43,7 +43,7 @@ public class Engine
             var roots = PyObject.GetRoots();
             fixed (IntPtr* rootsPointer = roots) {
                 StdLib.Memory.RegisterMemory((byte*)rootsPointer, roots.Length*sizeof(IntPtr), "roots");
-                Globals.dotnet_set_roots((byte**)rootsPointer, roots.Length);
+                Globals.dotnet_set_roots(instance.Data, (byte**)rootsPointer, roots.Length);
                 StdLib.Memory.UnregisterMemory((byte*)rootsPointer);
             }
             if (result is PyException ex) {
@@ -56,9 +56,9 @@ public class Engine
         }
     }
 
-    public void ExecuteRepl()
+    public unsafe void ExecuteRepl()
     {
-        Globals.pyexec_friendly_repl();
+        Globals.pyexec_friendly_repl(instance.Data);
     }
 }
 
