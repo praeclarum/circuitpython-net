@@ -5,6 +5,14 @@ namespace CircuitPythonTests;
 [TestFixture]
 public class EngineTests
 {
+    Engine? Engine = null;
+    
+    [SetUp]
+    public void Setup()
+    {
+        Engine = new Engine();
+    }
+
     [Test]
     public void PrintHelloWorld()
     {

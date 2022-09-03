@@ -1,3 +1,9 @@
-﻿
-CircuitPython.Engine.Execute("print('Hello, world! -from .NET')", CircuitPython.InputKind.Eval);
-CircuitPython.Engine.ExecuteRepl();
+﻿using CircuitPython;
+
+var engine = new CircuitPython.Engine();
+
+engine.Execute("print('Hello, world!')", InputKind.Eval);
+
+var result = engine.Execute("2 + 3", InputKind.Eval);
+
+Console.WriteLine(result?.Int64Value);

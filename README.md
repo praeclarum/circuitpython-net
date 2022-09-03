@@ -5,7 +5,11 @@
 ```csharp
 using CircuitPython;
 
-var result = Engine.Execute("2+3", InputKind.Eval);
+var engine = new CircuitPython.Engine();
 
-Assert.AreEqual("int", result?.PyTypeName);
+engine.Execute("print('Hello, world!')", InputKind.Eval);
+
+var result = engine.Execute("2 + 3", InputKind.Eval);
+
+Console.WriteLine(result?.Int64Value);
 ```
