@@ -18,10 +18,10 @@ public class Engine
 
     public unsafe Engine()
     {
-        Console.WriteLine($"Initializing CircuitPython engine: {(IntPtr)instance.Data}");
-        Globals.gc_init(instance.Data, &instance.Data->main.heap, &instance.Data->main.heap + 64*1024u);
-        Globals.qstr_init(instance.Data);
-        Globals.mp_init(instance.Data);
+        // Console.WriteLine($"Initializing CircuitPython engine: {(IntPtr)instance.Data}");
+        instance.gc_init(&instance.Data->main.heap, &instance.Data->main.heap + 64*1024u);
+        instance.qstr_init();
+        instance.mp_init();
     }
 
     public unsafe PyObject? Execute(string input, InputKind inputKind)
@@ -35,7 +35,7 @@ public class Engine
         try {
             var pointer = (byte*)handle.AddrOfPinnedObject();
             StdLib.Memory.RegisterMemory(pointer, inputBytes.Length, "code");
-            var resultHandle = (IntPtr)Globals.do_str(instance.Data, pointer, (int)inputKind);
+            var resultHandle = (IntPtr)instance.do_str(pointer, (int)inputKind);
             StdLib.Memory.UnregisterMemory(pointer);
             if (resultHandle == IntPtr.Zero)
                 throw new OutOfMemoryException();
@@ -43,7 +43,7 @@ public class Engine
             var roots = PyObject.GetRoots();
             fixed (IntPtr* rootsPointer = roots) {
                 StdLib.Memory.RegisterMemory((byte*)rootsPointer, roots.Length*sizeof(IntPtr), "roots");
-                Globals.dotnet_set_roots(instance.Data, (byte**)rootsPointer, roots.Length);
+                instance.dotnet_set_roots((byte**)rootsPointer, roots.Length);
                 StdLib.Memory.UnregisterMemory((byte*)rootsPointer);
             }
             if (result is PyException ex) {
@@ -58,7 +58,7 @@ public class Engine
 
     public unsafe void ExecuteRepl()
     {
-        Globals.pyexec_friendly_repl(instance.Data);
+        instance.pyexec_friendly_repl();
     }
 }
 

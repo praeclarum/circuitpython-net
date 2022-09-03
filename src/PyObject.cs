@@ -11,21 +11,21 @@ public abstract class PyObject
 
     public IntPtr Handle { get; }
     public Engine Engine { get; }
-    protected unsafe GlobalData* NativeData => Engine.Native.Data;
+    protected Instance Native => Engine.Native;
 
     string? pyTypeName;
     public unsafe string? PyTypeName {
         get {
             if (pyTypeName is string s) return s;
-            var pointer = Globals.mp_obj_get_type_str(NativeData, (byte*)Handle);
+            var pointer = Native.mp_obj_get_type_str((byte*)Handle);
             pyTypeName = Marshal.PtrToStringUTF8((IntPtr)pointer);
             return pyTypeName;
         }
     }
 
     public virtual long Int64Value => 0;
-    public unsafe bool IsCallable => Globals.mp_obj_is_callable(NativeData, (byte*)Handle) != 0;
-    public unsafe bool IsTrue => Globals.mp_obj_is_true(NativeData, (byte*)Handle) != 0;
+    public unsafe bool IsCallable => Native.mp_obj_is_callable((byte*)Handle) != 0;
+    public unsafe bool IsTrue => Native.mp_obj_is_true((byte*)Handle) != 0;
     public virtual unsafe PyObject? Length => null;
     public unsafe virtual string? StringValue => null;
 
@@ -60,32 +60,32 @@ public abstract class PyObject
     {
         if (handle == IntPtr.Zero)
             return null;
-        var NativeData = engine.Native.Data;
-        if (Globals.dotnet_obj_is_none(NativeData, (byte*)handle) != 0)
+        var Native = engine.Native;
+        if (Native.dotnet_obj_is_none((byte*)handle) != 0)
             return null;
 
         if (cache.TryGetValue(handle, out var weakRef) && weakRef.TryGetTarget(out var pyObj))
             return pyObj;
 
-        if (Globals.dotnet_obj_is_small_int(NativeData, (byte*)handle) != 0) {
+        if (Native.dotnet_obj_is_small_int((byte*)handle) != 0) {
             pyObj = new PySmallInt(handle, engine);
         }
-        else if (Globals.dotnet_obj_is_int(NativeData, (byte*)handle) != 0) {
+        else if (Native.dotnet_obj_is_int((byte*)handle) != 0) {
             pyObj = new PyInt(handle, engine);
         }
-        else if (Globals.dotnet_obj_is_str(NativeData, (byte*)handle) != 0) {
+        else if (Native.dotnet_obj_is_str((byte*)handle) != 0) {
             pyObj = new PyString(handle, engine);
         }
-        else if (Globals.dotnet_obj_is_list(NativeData, (byte*)handle) != 0) {
+        else if (Native.dotnet_obj_is_list((byte*)handle) != 0) {
             pyObj = new PyList(handle, engine);
         }
-        else if (Globals.dotnet_obj_is_dict(NativeData, (byte*)handle) != 0) {
+        else if (Native.dotnet_obj_is_dict((byte*)handle) != 0) {
             pyObj = new PyDict(handle, engine);
         }
-        else if (Globals.dotnet_obj_is_tuple(NativeData, (byte*)handle) != 0) {
+        else if (Native.dotnet_obj_is_tuple((byte*)handle) != 0) {
             pyObj = new PyTuple(handle, engine);
         }
-        else if (Globals.dotnet_obj_is_exception(NativeData, (byte*)handle) != 0) {
+        else if (Native.dotnet_obj_is_exception((byte*)handle) != 0) {
             pyObj = new PyException(handle, engine);
         }
         else {
@@ -104,7 +104,7 @@ public class PyGCObject : PyObject
 
 public class PyDict : PyGCObject
 {
-    public override unsafe PyObject? Length => FromPointer(Globals.mp_obj_len(NativeData, (byte*)Handle), Engine);
+    public override unsafe PyObject? Length => FromPointer(Native.mp_obj_len((byte*)Handle), Engine);
     public PyDict(IntPtr handle, Engine engine) : base(handle, engine) { }
 }
 
@@ -115,28 +115,28 @@ public class PyException : PyGCObject
 
 public class PyInt : PyGCObject
 {
-    public override unsafe long Int64Value => Globals.mp_obj_get_int(NativeData, (byte*)Handle);
+    public override unsafe long Int64Value => Native.mp_obj_get_int((byte*)Handle);
     public PyInt(IntPtr handle, Engine engine) : base(handle, engine) { }
 }
 
 public class PyList : PyGCObject
 {
-    public override unsafe PyObject? Length => FromPointer(Globals.mp_obj_len(NativeData, (byte*)Handle), Engine);
+    public override unsafe PyObject? Length => FromPointer(Native.mp_obj_len((byte*)Handle), Engine);
     public PyList(IntPtr handle, Engine engine) : base(handle, engine) { }
 }
 
 public class PySmallInt : PyObject
 {
-    public override unsafe long Int64Value => Globals.mp_obj_get_int(NativeData, (byte*)Handle);
+    public override unsafe long Int64Value => Native.mp_obj_get_int((byte*)Handle);
     public PySmallInt(IntPtr handle, Engine engine) : base(handle, engine) { }
 }
 
 public class PyString : PyGCObject
 {
-    public override unsafe PyObject? Length => FromPointer(Globals.mp_obj_len(NativeData, (byte*)Handle), Engine);
+    public override unsafe PyObject? Length => FromPointer(Native.mp_obj_len((byte*)Handle), Engine);
     public override unsafe string? StringValue {
         get {
-            var pointer = Globals.mp_obj_str_get_str(NativeData, (byte*)Handle);
+            var pointer = Native.mp_obj_str_get_str((byte*)Handle);
             return Marshal.PtrToStringUTF8((IntPtr)pointer);
         }
     }
@@ -145,6 +145,6 @@ public class PyString : PyGCObject
 
 public class PyTuple : PyGCObject
 {
-    public override unsafe PyObject? Length => FromPointer(Globals.mp_obj_len(NativeData, (byte*)Handle), Engine);
+    public override unsafe PyObject? Length => FromPointer(Native.mp_obj_len((byte*)Handle), Engine);
     public PyTuple(IntPtr handle, Engine engine) : base(handle, engine) { }
 }
