@@ -11,22 +11,26 @@ public enum InputKind {
     Eval = 2,
 }
 
-public static class Engine
+public class Engine
 {
-    unsafe static Engine()
+    readonly Globals Globals = new Globals();
+    public Globals Native => Globals;
+
+    public unsafe Engine()
     {
-        Globals.gc_init(&CircuitPythonNative.Modules.main.Globals->heap, &CircuitPythonNative.Modules.main.Globals->heap + 64*1024u);
+        Console.WriteLine($"Initializing CircuitPython engine: {(IntPtr)Globals.Data}");
+        Globals.gc_init(&Globals.Data->main.heap, &Globals.Data->main.heap + 64*1024u);
         Globals.qstr_init();
         Globals.mp_init();
     }
 
-    public static unsafe PyObject? Execute(string input, InputKind inputKind)
+    public unsafe PyObject? Execute(string input, InputKind inputKind)
     {
         var inputBytes = System.Text.Encoding.UTF8.GetBytes(input + "\0");
         var handle = GCHandle.Alloc(inputBytes, GCHandleType.Pinned);
 
         var local4 = stackalloc byte[4];
-        CircuitPythonNative.Modules.main.Globals->stack_top = local4;
+        Globals.Data->main.stack_top = local4;
 
         try {
             var pointer = (byte*)handle.AddrOfPinnedObject();
@@ -35,10 +39,12 @@ public static class Engine
             StdLib.Memory.UnregisterMemory(pointer);
             if (resultHandle == IntPtr.Zero)
                 throw new OutOfMemoryException();
-            var result = PyObject.FromPointer(resultHandle);
+            var result = PyObject.FromPointer(resultHandle, this);
             var roots = PyObject.GetRoots();
             fixed (IntPtr* rootsPointer = roots) {
-                CircuitPythonNative.Globals.dotnet_set_roots((byte**)rootsPointer, roots.Length);
+                StdLib.Memory.RegisterMemory((byte*)rootsPointer, roots.Length*sizeof(IntPtr), "roots");
+                Globals.dotnet_set_roots((byte**)rootsPointer, roots.Length);
+                StdLib.Memory.UnregisterMemory((byte*)rootsPointer);
             }
             if (result is PyException ex) {
                 throw new ExecutionException(ex);
@@ -50,7 +56,7 @@ public static class Engine
         }
     }
 
-    public static void ExecuteRepl()
+    public void ExecuteRepl()
     {
         Globals.pyexec_friendly_repl();
     }
